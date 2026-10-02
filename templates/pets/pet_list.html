@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Browse Pets{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <h1 class="fw-bold">Browse Pets</h1>
+        <p class="text-muted">Search and filter pets to find the right match.</p>
+    </div>
+
+    <form method="get" class="card card-body shadow-sm mb-4">
+        <div class="row g-3">
+            <div class="col-md-4"><input class="form-control" name="search" value="{{ request.GET.search }}" placeholder="Search by name, type, breed or location"></div>
+            <div class="col-md-2">
+                <select class="form-select" name="animal_type"><option value="">All Types</option>{% for value,label in animal_types %}<option value="{{ value }}" {% if request.GET.animal_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="gender"><option value="">Any Gender</option>{% for value,label in genders %}<option value="{{ value }}" {% if request.GET.gender == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+            </div>
+            <div class="col-md-2"><input class="form-control" name="location" value="{{ request.GET.location }}" placeholder="Location"></div>
+            <div class="col-md-2">
+                <select class="form-select" name="status"><option value="">Any Status</option>{% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+            </div>
+            <div class="col-md-4"><input class="form-control" name="breed" value="{{ request.GET.breed }}" placeholder="Breed"></div>
+            <div class="col-md-auto"><button class="btn btn-dark">Search / Filter</button></div>
+            <div class="col-md-auto"><a class="btn btn-outline-secondary" href="{% url 'pet_list' %}">Clear</a></div>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for pet in page_obj %}{% include 'pets/_pet_card.html' %}{% empty %}<div class="col-12"><div class="alert alert-warning">No matching pets found.</div></div>{% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a></li>{% endif %}
+            {% for number in page_obj.paginator.page_range %}<li class="page-item {% if page_obj.number == number %}active{% endif %}"><a class="page-link" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ number }}">{{ number }}</a></li>{% endfor %}
+            {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a></li>{% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

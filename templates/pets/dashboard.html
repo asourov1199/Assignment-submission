@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}My Dashboard{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold">My Dashboard</h1>
+    <p class="text-muted">Track your adoption requests and saved pets.</p>
+
+    <h3 class="mt-5 mb-3">My Adoption Requests</h3>
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light"><tr><th>Pet</th><th>Date</th><th>Phone</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for item in adoption_requests %}
+                <tr>
+                    <td><a href="{% url 'pet_detail' item.pet.pk %}" class="fw-semibold text-decoration-none">{{ item.pet.name }}</a></td>
+                    <td>{{ item.created_at|date:'d M Y' }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{% if item.status == 'Approved' %}<span class="badge text-bg-success">Approved</span>{% elif item.status == 'Rejected' %}<span class="badge text-bg-danger">Rejected</span>{% else %}<span class="badge text-bg-warning">Pending</span>{% endif %}</td>
+                </tr>
+                {% empty %}<tr><td colspan="4" class="text-center text-muted py-4">You have not submitted any adoption requests yet.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="mt-5 mb-3">Favorite Pets</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for fav in favorites %}{% with pet=fav.pet %}{% include 'pets/_pet_card.html' %}{% endwith %}{% empty %}<div class="col-12"><div class="alert alert-light border">No favorites yet.</div></div>{% endfor %}
+    </div>
+</div>
+{% endblock %}

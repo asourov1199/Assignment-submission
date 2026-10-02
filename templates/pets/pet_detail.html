@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{ pet.name }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-6">
+            {% if pet.image %}<img src="{{ pet.image.url }}" class="img-fluid rounded-4 shadow-sm detail-image" alt="{{ pet.name }}">{% else %}<div class="detail-placeholder rounded-4">🐾</div>{% endif %}
+        </div>
+        <div class="col-lg-6">
+            <div class="d-flex align-items-center gap-3 mb-3"><h1 class="fw-bold mb-0">{{ pet.name }}</h1>{% if pet.status == 'Available' %}<span class="badge text-bg-success">Available</span>{% else %}<span class="badge text-bg-secondary">Adopted</span>{% endif %}</div>
+            <div class="row g-3 mb-4">
+                <div class="col-6"><div class="info-box"><small>Type</small><strong>{{ pet.animal_type }}</strong></div></div>
+                <div class="col-6"><div class="info-box"><small>Breed</small><strong>{{ pet.breed }}</strong></div></div>
+                <div class="col-6"><div class="info-box"><small>Age</small><strong>{{ pet.age }} year{{ pet.age|pluralize }}</strong></div></div>
+                <div class="col-6"><div class="info-box"><small>Gender</small><strong>{{ pet.gender }}</strong></div></div>
+                <div class="col-12"><div class="info-box"><small>Location</small><strong>{{ pet.location }}</strong></div></div>
+            </div>
+            <h4>About {{ pet.name }}</h4>
+            <p class="text-secondary">{{ pet.description|linebreaksbr }}</p>
+
+            {% if pet.status == 'Available' %}
+                {% if user.is_authenticated %}
+                    {% if pending_request %}<div class="alert alert-info">You already have a pending adoption request for {{ pet.name }}.</div>{% else %}<a class="btn btn-dark btn-lg" href="{% url 'apply_adoption' pet.pk %}">Apply for Adoption</a>{% endif %}
+                    <form method="post" action="{% url 'toggle_favorite' pet.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-outline-danger btn-lg">{% if is_favorite %}♥ Remove Favorite{% else %}♡ Add to Favorites{% endif %}</button></form>
+                {% else %}
+                    <a class="btn btn-dark btn-lg" href="{% url 'login' %}?next={% url 'apply_adoption' pet.pk %}">Login to Adopt</a>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-danger">❌ This pet has already been adopted. New applications are closed.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

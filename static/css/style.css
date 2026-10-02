@@ -1,0 +1,13 @@
+body { background: #fbfbf8; color: #202020; }
+.hero { background: linear-gradient(180deg, #fff7dc 0%, #fbfbf8 100%); }
+.hero-card { border: 1px solid #eee4c4; }
+.pet-card { border: 0; transition: transform .2s ease, box-shadow .2s ease; overflow: hidden; }
+.pet-card:hover { transform: translateY(-4px); }
+.pet-image { height: 240px; object-fit: cover; }
+.pet-placeholder { height: 240px; display: grid; place-items: center; font-size: 72px; background: #f0eee6; }
+.detail-image { width: 100%; max-height: 520px; object-fit: cover; }
+.detail-placeholder { height: 460px; display: grid; place-items: center; font-size: 120px; background: #f0eee6; }
+.info-box { background: white; border: 1px solid #ececec; border-radius: 12px; padding: 14px 16px; }
+.info-box small { display: block; color: #777; }
+.info-box strong { display: block; margin-top: 2px; }
+textarea.form-control { min-height: 90px; }

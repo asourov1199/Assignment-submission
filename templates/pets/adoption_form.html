@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Adopt {{ pet.name }}{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width: 760px;">
+    <a href="{% url 'pet_detail' pet.pk %}" class="text-decoration-none">← Back to {{ pet.name }}</a>
+    <h1 class="fw-bold mt-3">Adoption Application</h1>
+    <p class="text-muted">You are applying to adopt <strong>{{ pet.name }}</strong>. Please answer honestly so the admin can review your request.</p>
+    <form method="post" class="card card-body shadow-sm p-4 mt-4">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            <div class="mb-3">
+                {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="form-check">{{ field }} <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label></div>
+                {% else %}
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                {% endif %}
+                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|striptags }}</div>{% endif %}
+            </div>
+        {% endfor %}
+        <button class="btn btn-dark btn-lg">Submit Application</button>
+    </form>
+</div>
+<script>
+document.querySelectorAll('input:not([type=checkbox]), textarea, select').forEach(el => el.classList.add('form-control'));
+</script>
+{% endblock %}

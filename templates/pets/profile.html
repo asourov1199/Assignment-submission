@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width: 760px;">
+    <h1 class="fw-bold">My Profile</h1>
+    <div class="card shadow-sm mt-4"><div class="card-body p-4">
+        <div class="mb-3"><small class="text-muted d-block">Username</small><strong>{{ user.username }}</strong></div>
+        <div class="mb-3"><small class="text-muted d-block">Email</small><strong>{{ user.email|default:'Not provided' }}</strong></div>
+        <div class="mb-3"><small class="text-muted d-block">Member since</small><strong>{{ user.date_joined|date:'d M Y' }}</strong></div>
+        <div class="row mt-4 text-center">
+            <div class="col"><div class="fs-3 fw-bold">{{ request_count }}</div><small>Adoption Requests</small></div>
+            <div class="col"><div class="fs-3 fw-bold">{{ favorite_count }}</div><small>Favorites</small></div>
+        </div>
+    </div></div>
+</div>
+{% endblock %}

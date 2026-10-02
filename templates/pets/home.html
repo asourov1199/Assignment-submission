@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}PawHome - Adopt a Friend{% endblock %}
+{% block content %}
+<section class="hero py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge rounded-pill text-bg-warning mb-3">Pet Adoption & Rescue</span>
+                <h1 class="display-4 fw-bold">A loving home can change a life.</h1>
+                <p class="lead text-secondary">Browse pets waiting for adoption, learn their story, and submit an adoption request online.</p>
+                <a href="{% url 'pet_list' %}" class="btn btn-dark btn-lg me-2">Browse Pets</a>
+                {% if not user.is_authenticated %}<a href="{% url 'register' %}" class="btn btn-outline-dark btn-lg">Create Account</a>{% endif %}
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-card shadow-sm p-4 rounded-4 bg-white">
+                    <div class="display-1 text-center">🐕 🐈</div>
+                    <div class="row text-center mt-3">
+                        <div class="col"><div class="fs-3 fw-bold">{{ pet_count }}</div><small>Total Pets</small></div>
+                        <div class="col"><div class="fs-3 fw-bold">{{ available_count }}</div><small>Available</small></div>
+                        <div class="col"><div class="fs-3 fw-bold">{{ adopted_count }}</div><small>Adopted</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div><h2 class="fw-bold mb-1">Pets looking for a home</h2><p class="text-muted mb-0">Meet some of our currently available pets.</p></div>
+        <a href="{% url 'pet_list' %}" class="btn btn-outline-dark">See all</a>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for pet in available_pets %}
+            {% include 'pets/_pet_card.html' %}
+        {% empty %}
+            <div class="col-12"><div class="alert alert-info">No pets are available right now.</div></div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
